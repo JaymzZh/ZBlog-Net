@@ -1,0 +1,7 @@
+{
+    "name": "ZBlog",
+    "description": "A blog power by ASP.NET 5",
+    "env": {
+	    "BUILDPACK_URL": "https://github.com/heroku/dotnet-buildpack.git"
+    }
+}
