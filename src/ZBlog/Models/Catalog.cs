@@ -6,7 +6,7 @@ namespace ZBlog.Models
 {
     public class Catalog
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(32)]
         public string Url { get; set; }

@@ -21,15 +21,15 @@ namespace ZBlog.Models
         public DateTime Time { get; set; }
 
         [ForeignKey("User")]
-        public Guid? UserId { get; set; }
+        public int? UserId { get; set; }
 
         public virtual User User { get; set; }
 
         [ForeignKey("Catalog")]
-        public Guid? CatalogId { get; set; }
+        public int? CatalogId { get; set; }
 
         public virtual Catalog Catalog { get; set; }
 
-        public virtual ICollection<PostTag> Tags { get; set; } = new List<PostTag>();
+        public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
     }
 }

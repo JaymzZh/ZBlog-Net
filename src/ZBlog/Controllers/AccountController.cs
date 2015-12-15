@@ -1,9 +1,13 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
+using ZBlog.Common;
 using ZBlog.Models;
 using ZBlog.Services;
 using ZBlog.ViewModels.Account;
@@ -13,21 +17,18 @@ namespace ZBlog.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly ZBlogDbContext _dbContext;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            ZBlogDbContext dbContext,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _dbContext = dbContext;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
@@ -53,18 +54,13 @@ namespace ZBlog.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                var user = await _dbContext.Users.Where(u => u.Email.Equals(model.Email) && u.Password.Equals(Util.GetMd5(model.Password))).FirstAsync();
+                if (null != user)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    HttpContext.Session.SetString("Admin", "true");
+//                    HttpContext.User = user;
                     return RedirectToLocal(returnUrl);
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
                 }
                 else
                 {
@@ -83,7 +79,7 @@ namespace ZBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
-            await _signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
             _logger.LogInformation(4, "User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
@@ -100,7 +96,7 @@ namespace ZBlog.Controllers
 
         private async Task<User> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await _dbContext.Users.Where(u => u.Id.Equals(HttpContext.User.GetUserId())).FirstOrDefaultAsync();
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

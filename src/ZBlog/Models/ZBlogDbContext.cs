@@ -8,6 +8,8 @@ namespace ZBlog.Models
 
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+
         public DbSet<PostTag> PostTags { get; set; }
 
         public DbSet<Catalog> Catalogs { get; set; }
@@ -29,7 +31,14 @@ namespace ZBlog.Models
 
             builder.Entity<PostTag>(e =>
             {
-                e.HasIndex(x => x.Tag);
+                e.HasIndex(x => x.TagId);
+                e.HasIndex(x => x.PostId);
+                e.HasKey(x => new {x.TagId, x.PostId});
+            });
+
+            builder.Entity<Tag>(e =>
+            {
+                e.HasIndex(x => x.Id);
             });
         }
     }

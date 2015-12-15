@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using System;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
@@ -40,11 +41,13 @@ namespace ZBlog
                 .AddDbContext<ZBlogDbContext>(options =>
                     options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.AddIdentity<User, IdentityRole>()
+            /*services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ZBlogDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();*/
 
             services.AddMvc();
+            services.AddCaching();
+            services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -67,7 +70,7 @@ namespace ZBlog
             {
                 app.UseExceptionHandler("/Home/Error");
 
-                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                /*// For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
                     using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
@@ -77,14 +80,16 @@ namespace ZBlog
                              .Database.Migrate();
                     }
                 }
-                catch { }
+                catch { }*/
             }
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseSession();
+
+            //            app.UseIdentity();
 
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
@@ -94,6 +99,8 @@ namespace ZBlog
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SampleData.InitializeZBlog(app.ApplicationServices).Wait();
         }
 
         // Entry point for the application.
