@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,11 +39,7 @@ namespace ZBlog
                 .AddSqlite()
                 .AddDbContext<ZBlogDbContext>(options =>
                     options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
-
-            /*services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ZBlogDbContext>()
-                .AddDefaultTokenProviders();*/
-
+            
             services.AddMvc();
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
@@ -88,9 +83,7 @@ namespace ZBlog
             app.UseStaticFiles();
 
             app.UseSession();
-
-            //            app.UseIdentity();
-
+            
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>

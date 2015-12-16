@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using ZBlog.Models;
