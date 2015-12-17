@@ -93,7 +93,7 @@ namespace ZBlog
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            SampleData.InitializeZBlog(app.ApplicationServices).Wait();
+            SampleData.InitializeZBlog(app.ApplicationServices, Configuration).Wait();
         }
 
         // Entry point for the application.

@@ -1,6 +1,14 @@
 ﻿{
-  "userSecretsId": "aspnet5-zblog-c3f3af0a-8b70-4256-a19b-c2c1b10604c0",
+  "title": "ZBlog",
   "version": "1.0.0-*",
+  "description": "A blog powered by ASP.NET 5",
+  "copyright": "zhangmm.cn Co.,Ltd",
+  "authors": [ "Jeffiiy" ],
+  "tags": [ "Blog", "vNext", "ASP.Net", "MVC" ],
+  "iconUrl": "http://zhangmm.cn/images/logo.png",
+  "projectUrl": "https://github.com/Jeffiiy/ZBlog-Net",
+  "licenseUrl": "",
+  "userSecretsId": "aspnet5-zblog-c3f3af0a-8b70-4256-a19b-c2c1b10604c0",
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -17,6 +25,7 @@
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
     "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
     "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc1-final",

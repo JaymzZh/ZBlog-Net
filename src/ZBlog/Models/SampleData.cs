@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ZBlog.Common;
 
@@ -9,18 +10,19 @@ namespace ZBlog.Models
 {
     public static class SampleData
     {
-        public static async Task InitializeZBlog(IServiceProvider serviceProvider, bool createUsers = true)
+        public static async Task InitializeZBlog(IServiceProvider serviceProvider, IConfigurationRoot configuration, bool createUsers = true)
         {
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var db = serviceScope.ServiceProvider.GetService<ZBlogDbContext>();
+                var serverProvider = serviceScope.ServiceProvider;
+                var dbContext = serverProvider.GetService<ZBlogDbContext>();
 
-                if (await db.Database.EnsureCreatedAsync())
+                if (await dbContext.Database.EnsureCreatedAsync())
                 {
-                    await InsertTestData(serviceProvider);
+                    await InsertTestData(serverProvider);
                     if (createUsers)
                     {
-                        await CreateAdminUser(db);
+                        await CreateAdminUser(dbContext, configuration);
                     }
                 }
             }
@@ -31,18 +33,17 @@ namespace ZBlog.Models
             return Task.FromResult(0);
         }
 
-        private static async Task CreateAdminUser(ZBlogDbContext dbContext)
+        private static async Task CreateAdminUser(ZBlogDbContext dbContext, IConfiguration configuration)
         {
             var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
-
             if (user == null)
             {
                 user = new User
                 {
-                    Name = "zhangmm",
-                    NickName = "Jeffiy",
-                    Email = "zhangmin6105@qq.com",
-                    Password = Util.GetMd5("123150")
+                    Name = configuration["User:Name"],
+                    NickName = configuration["User:NickName"],
+                    Email = configuration["User:Email"],
+                    Password = Util.GetMd5(configuration["User:Password"])
                 };
                 dbContext.Users.Add(user);
                 await dbContext.SaveChangesAsync();
