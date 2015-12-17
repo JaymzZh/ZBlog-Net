@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
 using ZBlog.Common;
 
@@ -9,8 +11,10 @@ namespace ZBlog.Models
     {
         public static async Task InitializeZBlog(IServiceProvider serviceProvider, bool createUsers = true)
         {
-            using (var db = serviceProvider.GetService<ZBlogDbContext>())
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
+                var db = serviceScope.ServiceProvider.GetService<ZBlogDbContext>();
+
                 if (await db.Database.EnsureCreatedAsync())
                 {
                     await InsertTestData(serviceProvider);
@@ -29,15 +33,20 @@ namespace ZBlog.Models
 
         private static async Task CreateAdminUser(ZBlogDbContext dbContext)
         {
-            var user = new User
+            var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+
+            if (user == null)
             {
-                Name = "zhangmm",
-                NickName = "Jeffiy",
-                Email = "zhangmin6105@qq.com",
-                Password = Util.GetMd5("123150")
-            };
-            dbContext.Users.Add(user);
-            await dbContext.SaveChangesAsync();
+                user = new User
+                {
+                    Name = "zhangmm",
+                    NickName = "Jeffiy",
+                    Email = "zhangmin6105@qq.com",
+                    Password = Util.GetMd5("123150")
+                };
+                dbContext.Users.Add(user);
+                await dbContext.SaveChangesAsync();
+            }
         }
     }
 }

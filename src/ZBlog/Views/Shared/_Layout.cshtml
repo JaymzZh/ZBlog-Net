@@ -36,18 +36,7 @@
             <ul class="am-nav am-nav-pills am-topbar-nav">
                 <li class="am-active"><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li><a asp-controller="Home" asp-action="About">About</a></li>
-                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                <li class="am-dropdown" data-am-dropdown>
-                    <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
-                        Menu <span class="am-icon-caret-down"></span>
-                    </a>
-                    <ul class="am-dropdown-content">
-                        <li class="am-dropdown-header">标题</li>
-                        <li><a href="#">关于我们</a></li>
-                        <li><a href="#">关于字体</a></li>
-                        <li><a href="#">TIPS</a></li>
-                    </ul>
-                </li>
+                @await Html.PartialAsync("_LoginPartial")
             </ul>
 
             <form class="am-topbar-form am-topbar-left am-form-inline am-topbar-right" role="search">
@@ -129,12 +118,14 @@
                 </section>
             </div>
         </div>
-
     </div>
+
+    <form id="form-logout" asp-controller="Admin" asp-action="Logout" method="POST" class="am-hide">
+    </form>
 
     <footer class="blog-footer">
         <p>
-            ZBlog powered by ASP.NET 5<br/>
+            <a href="https:\\github.com\Jeffiy\ZBlog-Net" target="_blank">ZBlog</a> powered by ASP.NET 5<br />
             <small>&copy; 2015 - ZBlog.</small>
         </p>
     </footer>

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Security.Principal;
 
 namespace ZBlog.Models
 {
-    public class User /*: ClaimsPrincipal*/
+    public class User
     {
         public int Id { get; set; }
 
@@ -23,12 +20,5 @@ namespace ZBlog.Models
         public string About { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-/*
-        public override bool IsInRole(string role)
-        {
-            return false;
-        }
-
-        public override IIdentity Identity => new GenericIdentity(Email);*/
     }
 }
