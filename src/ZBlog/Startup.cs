@@ -29,7 +29,7 @@ namespace ZBlog
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; set; }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,6 +43,8 @@ namespace ZBlog
             services.AddMvc();
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
+
+            services.AddSingleton<IConfiguration>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

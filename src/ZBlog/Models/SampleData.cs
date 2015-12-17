@@ -10,7 +10,7 @@ namespace ZBlog.Models
 {
     public static class SampleData
     {
-        public static async Task InitializeZBlog(IServiceProvider serviceProvider, IConfigurationRoot configuration, bool createUsers = true)
+        public static async Task InitializeZBlog(IServiceProvider serviceProvider, IConfiguration configuration, bool createUsers = true)
         {
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
