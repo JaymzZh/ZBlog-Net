@@ -44,6 +44,7 @@ namespace ZBlog
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
+            // fix: can't inject
             services.AddSingleton<IConfiguration>();
 
             // Add application services.
