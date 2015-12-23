@@ -13,7 +13,6 @@ namespace ZBlog.Controllers
         public HomeController(ZBlogDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
-            // fix: can't inject
             _configuration = configuration;
         }
 

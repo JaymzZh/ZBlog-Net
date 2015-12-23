@@ -44,8 +44,7 @@ namespace ZBlog
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
-            // fix: can't inject
-            services.AddSingleton<IConfiguration>();
+            services.AddSingleton<IConfiguration>(Configuration);
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -98,8 +97,5 @@ namespace ZBlog
 
             SampleData.InitializeZBlog(app.ApplicationServices, Configuration).Wait();
         }
-
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
