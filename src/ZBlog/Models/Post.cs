@@ -18,7 +18,11 @@ namespace ZBlog.Models
 
         public string Content { get; set; }
 
-        public DateTime Time { get; set; }
+        public DateTime CreateTime { get; set; }
+
+        public DateTime LastEditTime { get; set; }
+
+        public int Visits { get; set; }
 
         [ForeignKey("User")]
         public int? UserId { get; set; }
@@ -31,5 +35,11 @@ namespace ZBlog.Models
         public virtual Catalog Catalog { get; set; }
 
         public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
+
+        public Post()
+        {
+            CreateTime = DateTime.Now;
+            LastEditTime = DateTime.Now;
+        }
     }
 }

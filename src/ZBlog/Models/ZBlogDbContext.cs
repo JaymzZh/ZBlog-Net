@@ -25,7 +25,7 @@ namespace ZBlog.Models
 
             builder.Entity<Post>(e =>
             {
-                e.HasIndex(x => x.Time);
+                e.HasIndex(x => x.CreateTime);
                 e.HasIndex(x => x.Url).IsUnique();
             });
 
