@@ -1,7 +1,13 @@
 {
-    "name": "ZBlog",
-    "description": "A blog power by ASP.NET 5",
-    "env": {
-	    "BUILDPACK_URL": "https://github.com/heroku/dotnet-buildpack.git"
-    }
+  "name": "ZBlog",
+  "description": "A blog power by ASP.NET 5",
+  "copyright": "zhangmm.cn Co.,Ltd",
+  "authors": [ "Jeffiiy" ],
+  "tags": [ "Blog", "vNext", "ASP.Net", "MVC" ],
+  "iconUrl": "http://zhangmm.cn/images/logo.png",
+  "projectUrl": "https://github.com/Jeffiiy/ZBlog-Net",
+  "licenseUrl": "https://github.com/Jeffiy/ZBlog-Net/blob/master/LICENSE.txt",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/heroku/dotnet-buildpack.git"
+  }
 }
