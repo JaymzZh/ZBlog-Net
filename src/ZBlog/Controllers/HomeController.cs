@@ -8,12 +8,10 @@ namespace ZBlog.Controllers
     public class HomeController : Controller
     {
         private readonly ZBlogDbContext _dbContext;
-        private readonly IConfiguration _configuration;
 
-        public HomeController(ZBlogDbContext dbContext, IConfiguration configuration)
+        public HomeController(ZBlogDbContext dbContext)
         {
             _dbContext = dbContext;
-            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -21,10 +19,10 @@ namespace ZBlog.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult About([FromServices] IConfiguration configuration)
         {
-            ViewData["About"] = _configuration != null
-                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(_configuration["User:Name"]))?.About ??
+            ViewData["About"] = configuration != null
+                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(configuration["User:Name"]))?.About ??
                      "Nothing here..."
                    : "Can't find the configuration.";
 

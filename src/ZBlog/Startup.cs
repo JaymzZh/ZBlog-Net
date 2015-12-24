@@ -87,12 +87,21 @@ namespace ZBlog
             app.UseSession();
             
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
-
+            
             app.UseMvc(routes =>
             {
+                /*routes.MapRoute(
+                    name: "areaRoute",
+                    template: "{area:exists}/{controller}/{action=Index}",
+                    defaults: new { action = "Index" });*/
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "api",
+                    template: "{controller}/{id?}");
             });
 
             SampleData.InitializeZBlog(app.ApplicationServices, Configuration).Wait();

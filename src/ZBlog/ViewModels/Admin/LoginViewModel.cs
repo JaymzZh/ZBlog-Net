@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ZBlog.ViewModels.Account
+namespace ZBlog.ViewModels.Admin
 {
     public class LoginViewModel
     {

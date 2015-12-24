@@ -8,7 +8,6 @@ using ZBlog.Common;
 using ZBlog.Filters;
 using ZBlog.Models;
 using ZBlog.Services;
-using ZBlog.ViewModels.Account;
 using ZBlog.ViewModels.Admin;
 
 namespace ZBlog.Controllers

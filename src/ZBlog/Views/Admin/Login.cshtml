@@ -1,11 +1,12 @@
-﻿@model LoginViewModel
+﻿@using System.Threading.Tasks
+@model LoginViewModel
 
 @{
     ViewData["Title"] = "Log in";
 }
 
 <section>
-    <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+    <form asp-controller="Admin" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
         <fieldset>
             <legend>@ViewData["Title"]</legend>
             <div asp-validation-summary="All" class="text-danger"></div>
