@@ -7,7 +7,7 @@ namespace ZBlog.Models
 {
     public class Post
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(256)]
         public string Url { get; set; }
@@ -30,6 +30,7 @@ namespace ZBlog.Models
         public virtual User User { get; set; }
 
         [ForeignKey("Catalog")]
+        [Display(Name = "Catalog")]
         public int? CatalogId { get; set; }
 
         public virtual Catalog Catalog { get; set; }

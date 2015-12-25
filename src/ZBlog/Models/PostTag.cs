@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZBlog.Models
@@ -16,13 +15,12 @@ namespace ZBlog.Models
     public class PostTag
     {
         [ForeignKey("Post")]
-        public Guid? PostId { get; set; }
+        public int? PostId { get; set; }
 
         public virtual Post Post { get; set; }
-
-
+        
         [ForeignKey("Tag")]
-        public int TagId { get; set; }
+        public int? TagId { get; set; }
 
         public virtual Tag Tag { get; set; }
     }

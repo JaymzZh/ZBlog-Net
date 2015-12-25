@@ -28,9 +28,34 @@ namespace ZBlog.Models
             }
         }
 
-        private static Task InsertTestData(IServiceProvider serviceProvider)
+        private static async Task InsertTestData(IServiceProvider serviceProvider)
         {
-            return Task.FromResult(0);
+            var tag1 = new Tag
+            {
+                Name = "Tag1"
+            };
+            var tag2 = new Tag
+            {
+                Name = "Tag2"
+            };
+            var catalog1 = new Catalog
+            {
+                Url = "Code",
+                PRI = 10,
+                Title = "Code"
+            };
+            var catalog2 = new Catalog
+            {
+                Url = "Fun",
+                PRI = 9,
+                Title = "Fun"
+            };
+            var dbContext = serviceProvider.GetService<ZBlogDbContext>();
+            dbContext.Add(tag1);
+            dbContext.Add(tag2);
+            dbContext.Add(catalog1);
+            dbContext.Add(catalog2);
+            await dbContext.SaveChangesAsync();
         }
 
         private static async Task CreateAdminUser(ZBlogDbContext dbContext, IConfiguration configuration)

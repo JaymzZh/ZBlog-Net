@@ -36,6 +36,16 @@ namespace ZBlog.Models
                 e.HasKey(x => new {x.TagId, x.PostId});
             });
 
+            builder.Entity<PostTag>()
+                .HasOne(pt => pt.Post)
+                .WithMany(p => p.PostTags)
+                .HasForeignKey(pt => pt.PostId);
+
+            builder.Entity<PostTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany(t => t.PostTags)
+                .HasForeignKey(pt => pt.TagId);
+
             builder.Entity<Tag>(e =>
             {
                 e.HasIndex(x => x.Id);

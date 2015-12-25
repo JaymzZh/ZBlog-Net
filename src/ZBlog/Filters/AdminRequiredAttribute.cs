@@ -11,7 +11,7 @@ namespace ZBlog.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!IsAdmin(context))
-                context.Result = new RedirectResult("/Admin/Login");
+                context.Result = new RedirectResult("/Admin/Login?returnUrl=" + context.HttpContext.Request.Path);
             else
                 base.OnActionExecuting(context);
         }
@@ -19,7 +19,7 @@ namespace ZBlog.Filters
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!IsAdmin(context))
-                context.Result = new RedirectResult("/Admin/Login");
+                context.Result = new RedirectResult("/Admin/Login?returnUrl=" + context.HttpContext.Request.Path);
             return base.OnActionExecutionAsync(context, next);
         }
 

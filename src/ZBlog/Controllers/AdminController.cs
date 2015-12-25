@@ -145,7 +145,7 @@ namespace ZBlog.Controllers
 
         private async Task<User> GetCurrentUserAsync()
         {
-            return await _dbContext.Users.Where(u => u.Name.Equals(HttpContext.Session.GetString("AdminName"))).FirstOrDefaultAsync();
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Name.Equals(HttpContext.Session.GetString("AdminName")));
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

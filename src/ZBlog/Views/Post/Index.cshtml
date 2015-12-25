@@ -1,0 +1,41 @@
+﻿@model List<Post>
+@{
+    ViewData["Title"] = "Post List";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+<div>
+    <table class="am-table am-table-bordered am-table-striped am-table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Catalog</th>
+                <th>Tag</th>
+                <th>CreateTime</th>
+                <th>LastEditTime</th>
+                <th>User</th>
+                <th>Manage</th>
+            </tr>
+        </thead>
+        <tbody>
+         @foreach (Post post in Model)
+         {
+             <tr>
+                 <td>@post.Title</td>
+                 <td>@post.Url</td>
+                 <td>@post.Catalog.Title</td>
+                 <td>@string.Join(",", post.PostTags.Select(t => t.Tag.Name))</td>
+                 <td>@post.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                 <td>@post.LastEditTime.ToString("yyyy-MM-dd HH:mm")</td>
+                 <td>@post.User.Name</td>
+                 <td>
+                     <a asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id">Edit</a>
+                     <a asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id">Delete</a>
+                 </td>
+             </tr>
+         }
+        </tbody>
+    </table>
+</div>
