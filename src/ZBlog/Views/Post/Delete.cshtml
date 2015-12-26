@@ -1,0 +1,18 @@
+﻿@model Post
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    Are you sure you want to delete the post titled
+    <strong>@Model.Title</strong>?
+</p>
+
+<form asp-controller="Post" asp-action="Delete" method="post" class="form-horizontal" role="form">
+    <hr />
+    <div class="am-form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="am-btn am-btn-primary">Delete</button>
+            <button type="button" class="am-btn am-btn-secondary" onclick="window.history.go(-1);">Cancel</button>
+        </div>
+    </div>
+</form>
