@@ -34,7 +34,7 @@
 
         <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
             <ul class="am-nav am-nav-pills am-topbar-nav">
-                <li class="am-active"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li><a asp-controller="Home" asp-action="About">About</a></li>
                 @await Html.PartialAsync("_LoginPartial")
             </ul>
@@ -120,8 +120,7 @@
         </div>
     </div>
 
-    <form id="form-logout" asp-controller="Admin" asp-action="Logout" method="POST" class="am-hide">
-    </form>
+    <form id="form-logout" asp-controller="Admin" asp-action="Logout" method="POST" class="am-hide"></form>
 
     <footer class="blog-footer">
         <p>
@@ -147,6 +146,45 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //设置活动菜单项
+            var url = "@Context.Request.Path";
+//            console.debug(url);
+            var href = "";
+            $("ul.am-topbar-nav a[href]").each(function () {
+                href = $(this).attr("href");
+//                console.debug(href);
+                if (href === url) {
+                    $("ul.am-topbar-nav li").removeClass("am-active");
+                    var p1 = $(this).parent("li");
+                    p1.addClass("am-active");
+
+                    //循环设置父级菜单样式
+                    for (var i = 0; i < 3; i++) {
+                        p1 = p1.parent();
+                        if (p1 != undefined) {
+                            if (p1.hasClass("am-topbar-nav")) {
+                                break;
+                            } else {
+                                if (p1.hasClass("am-dropdown")) {
+                                    p1.addClass("am-dropdown-toggle-hover");
+                                    break;
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            });
+
+            //默认选择第一个菜单项
+            if ($("ul.am-topbar-nav li.am-active").length <= 0) {
+                $("ul.am-topbar-nav li:eq(0)").addClass("am-active");
+            }
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
