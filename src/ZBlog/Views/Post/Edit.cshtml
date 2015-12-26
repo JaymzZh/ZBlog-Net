@@ -1,0 +1,57 @@
+﻿@model Post
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Post" asp-action="Edit" method="post" class="form-horizontal" role="form">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Id" class="am-form-field" type="hidden"/>
+    <input asp-for="CreateTime" class="am-form-field" type="hidden"/>
+    <input asp-for="LastEditTime" class="am-form-field" type="hidden"/>
+    <input asp-for="Visits" class="am-form-field" type="hidden" />
+    <div class="am-form-group">
+        <label asp-for="Title" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Title" class="am-form-field" placeholder="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label asp-for="Url" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Url" class="am-form-field" placeholder="Post url" />
+            <span asp-validation-for="Url" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label asp-for="Content" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Content" class="am-form-field" placeholder="Write something here" />
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label asp-for="CatalogId" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <select asp-for="CatalogId" class="am-form-field">
+                @foreach (Catalog c in ViewBag.Catalogs)
+                {
+                    <!option value="@c.Id" @(Model?.CatalogId == c.Id ? "selected" : "")>@c.Title</!option>
+                }
+            </select>
+            <span asp-validation-for="CatalogId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label for="Tags" class="col-md-2 am-form-label">Tag</label>
+        <div class="col-md-10">
+            <input id="Tags" name="Tags" class="am-form-field" placeholder="Use a ',' to split tags" value="@string.Join(",", Model.PostTags.Select(t => t.Tag.Name))" />
+        </div>
+    </div>
+    <div class="am-form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="am-btn am-btn-primary">Update</button>
+            <button type="button" class="am-btn am-btn-secondary" onclick="window.history.go(-1);">Cancel</button>
+        </div>
+    </div>
+</form>

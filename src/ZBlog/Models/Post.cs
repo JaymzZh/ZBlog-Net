@@ -36,11 +36,5 @@ namespace ZBlog.Models
         public virtual Catalog Catalog { get; set; }
 
         public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
-
-        public Post()
-        {
-            CreateTime = DateTime.Now;
-            LastEditTime = DateTime.Now;
-        }
     }
 }
