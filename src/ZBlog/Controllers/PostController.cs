@@ -96,14 +96,13 @@ namespace ZBlog.Controllers
                     }
                     await _dbContext.SaveChangesAsync();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.PostNewSuccess });
             }
             var catalog = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync();
             ViewBag.Catalogs = catalog;
             return View(model);
         }
-
-
+        
         #region Helpers
 
         public enum ManageMessageId
