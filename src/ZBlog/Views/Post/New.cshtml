@@ -7,26 +7,26 @@
 <h2>@ViewData["Title"]</h2>
 
 <form asp-controller="Post" asp-action="New" method="post" class="form-horizontal" role="form">
-    <hr/>
+    <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="am-form-group">
         <label asp-for="Title" class="col-md-2 am-form-label"></label>
         <div class="col-md-10">
-            <input asp-for="Title" class="am-form-field" placeholder="Title"/>
+            <input asp-for="Title" class="am-form-field" placeholder="Title" />
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
     </div>
     <div class="am-form-group">
         <label asp-for="Url" class="col-md-2 am-form-label"></label>
         <div class="col-md-10">
-            <input asp-for="Url" class="am-form-field" placeholder="Post url"/>
+            <input asp-for="Url" class="am-form-field" placeholder="Post url" />
             <span asp-validation-for="Url" class="text-danger"></span>
         </div>
     </div>
     <div class="am-form-group">
         <label asp-for="Content" class="col-md-2 am-form-label"></label>
         <div class="col-md-10">
-            <input asp-for="Content" class="am-form-field" placeholder="Write something here"/>
+            <textarea asp-for="Content" class="am-form-field" placeholder="Write something here"></textarea>
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
     </div>
@@ -56,3 +56,9 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <script type="text/javascript">
+        var simplemde = new SimpleMDE({ element: $("#Content")[0] });
+    </script>
+}
