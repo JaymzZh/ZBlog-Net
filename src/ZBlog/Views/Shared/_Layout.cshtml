@@ -156,7 +156,7 @@
             $("ul.am-topbar-nav a[href]").each(function () {
                 href = $(this).attr("href");
 //                console.debug(href);
-                if (href === url) {
+                if (url.indexOf(href) >= 0) {
                     $("ul.am-topbar-nav li").removeClass("am-active");
                     var p1 = $(this).parent("li");
                     p1.addClass("am-active");
