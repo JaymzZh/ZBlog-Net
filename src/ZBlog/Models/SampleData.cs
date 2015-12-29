@@ -19,11 +19,11 @@ namespace ZBlog.Models
 
                 if (await dbContext.Database.EnsureCreatedAsync())
                 {
-                    await InsertTestData(serverProvider);
                     if (createUsers)
                     {
                         await CreateAdminUser(dbContext, configuration);
                     }
+                    await InsertTestData(serverProvider);
                 }
             }
         }
@@ -55,6 +55,27 @@ namespace ZBlog.Models
             dbContext.Add(tag2);
             dbContext.Add(catalog1);
             dbContext.Add(catalog2);
+            for (int i = 1; i < 16; i++)
+            {
+                var post = new Post
+                {
+                    Title = $"Test-{i}",
+                    Url = $"Test-{i}",
+                    Summary = $"# Content-{i}",
+                    Content = $"# Content-{i}",
+                    CreateTime = DateTime.Now,
+                    LastEditTime = DateTime.Now,
+                    UserId = 1,
+                    Catalog = i % 2 == 0 ? catalog1 : catalog2
+                };
+                dbContext.Add(post);
+                var postTag = new PostTag
+                {
+                    Post = post,
+                    Tag = i % 2 == 0 ? tag1 : tag2
+                };
+                dbContext.Add(postTag);
+            }
             await dbContext.SaveChangesAsync();
         }
 

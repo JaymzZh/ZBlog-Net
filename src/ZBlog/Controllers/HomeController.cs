@@ -19,7 +19,7 @@ namespace ZBlog.Controllers
         }
 
         [Route("{page:int?}")]
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page = 1)
         {
             var posts = _dbContext.Posts.Include(p => p.Catalog)
                 .Include(p => p.PostTags)
@@ -27,24 +27,13 @@ namespace ZBlog.Controllers
                 .Include(p => p.User)
                 .OrderByDescending(p => p.CreateTime);
 
-            List<Post> result;
-            if (page.HasValue)
-            {
-                result =
-                    await posts.Skip(page.Value * 10)
-                    .Take(10)
-                    .ToListAsync();
-            }
-            else
-            {
-                result = await posts.Take(10).ToListAsync();
-            }
+            var result = await GetPagedResult(page, posts);
 
             return View(result);
         }
 
         [Route("Catalog/{title}/{page:int?}")]
-        public async Task<IActionResult> Catalog(string title, int? page)
+        public async Task<IActionResult> Catalog(string title, int? page = 1)
         {
             if (string.IsNullOrWhiteSpace(title))
                 return HttpNotFound();
@@ -56,24 +45,13 @@ namespace ZBlog.Controllers
             .Where(p => p.Catalog.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
             .OrderByDescending(p => p.CreateTime);
 
-            List<Post> result;
-            if (page.HasValue)
-            {
-                result =
-                    await posts.Skip(page.Value * 10)
-                    .Take(10)
-                    .ToListAsync();
-            }
-            else
-            {
-                result = await posts.Take(10).ToListAsync();
-            }
+            var result = await GetPagedResult(page, posts);
 
             return View("Index" , result);
         }
 
         [Route("Tag/{name}/{page:int?}")]
-        public async Task<IActionResult> Tag(string name, int? page)
+        public async Task<IActionResult> Tag(string name, int? page = 1)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return HttpNotFound();
@@ -85,20 +63,64 @@ namespace ZBlog.Controllers
             .Where(p => p.PostTags.Any(t => t.Tag.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             .OrderByDescending(p => p.CreateTime);
 
+            var result = await GetPagedResult(page, posts);
+
+            return View("Index" , result);
+        }
+
+        [Route("User/{name}/{page:int?}")]
+        public async Task<IActionResult> Users(string name, int? page = 1)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return HttpNotFound();
+
+            var posts = _dbContext.Posts.Include(p => p.Catalog)
+            .Include(p => p.PostTags)
+            .ThenInclude(p => p.Tag)
+            .Include(p => p.User)
+            .Where(p => p.User.NickName.Equals(name, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(p => p.CreateTime);
+
+            var result = await GetPagedResult(page, posts);
+
+            return View("Index" , result);
+        }
+
+        private async Task<List<Post>> GetPagedResult(int? page, IOrderedQueryable<Post> posts)
+        {
             List<Post> result;
-            if (page.HasValue)
+            int? pagePrev = null, pageNext = null;
+            if (page.HasValue && page.Value >= 1)
             {
+                int p = page.Value;
                 result =
-                    await posts.Skip(page.Value * 10)
-                    .Take(10)
-                    .ToListAsync();
+                    await posts.Skip((p - 1) * 10)
+                        .Take(10)
+                        .ToListAsync();
+                pagePrev = p - 1;
+                pageNext = p + 1;
             }
             else
             {
                 result = await posts.Take(10).ToListAsync();
             }
 
-            return View("Index" , result);
+            if (pagePrev <= 0)
+            {
+                pagePrev = null;
+            }
+            var postCount = posts.Count();
+            int pageCount = postCount / 10;
+            pageCount += postCount % 10 == 0 ? 0 : 1;
+            if (pageCount < pageNext)
+            {
+                pageNext = null;
+            }
+
+            ViewBag.PagePrev = pagePrev;
+            ViewBag.PageNext = pageNext;
+
+            return result;
         }
 
         public IActionResult About([FromServices] IConfiguration configuration)

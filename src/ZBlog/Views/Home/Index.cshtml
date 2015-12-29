@@ -11,17 +11,21 @@
     <article class="blog-main">
         <h3 class="am-article-title blog-title">
             <a asp-controller="Post" asp-action="Index" asp-route-url="@post.Url">@post.Title</a>
+            @if (Html.IsAdmin())
+            {
+                <a asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id" title="Edit"><i class="am-icon-btn am-success am-icon-edit"></i></a>
+            }
         </h3>
         <h4 class="am-article-meta blog-meta">
             <span class="article-date"><i class="am-icon-calendar"></i> @post.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
-            <span class="article-user"><i class="am-icon-user"></i> <a href="">@post.User.NickName</a></span>
-            <span class="article-catalog"><i class="am-icon-folder-open-o"></i> <a asp-controller="Home" asp-action="Catalog" asp-route-title="@post.Catalog.Title">@post.Catalog.Title</a></span>
+            <span class="article-user"><i class="am-icon-user"></i> <a asp-controller="Home" asp-action="Users" asp-route-name="@post.User.NickName">@post.User?.NickName</a></span>
+            <span class="article-catalog"><i class="am-icon-folder-open-o"></i> <a asp-controller="Home" asp-action="Catalog" asp-route-title="@post.Catalog?.Title">@post.Catalog?.Title</a></span>
             <span class="article-tag">
                 <i class="am-icon-tags"></i>
                 @foreach (var tag in post.PostTags)
                 {
                     <span class="am-badge am-badge-success">
-                        <a asp-controller="Home" asp-action="Tag" asp-route-name="@tag.Tag.Name">@tag.Tag.Name</a>
+                        <a asp-controller="Home" asp-action="Tag" asp-route-name="@tag.Tag?.Name">@tag.Tag?.Name</a>
                     </span>
                 }
             </span>
@@ -37,6 +41,39 @@
 }
 
 <ul class="am-pagination blog-pagination">
-    <li class="am-pagination-prev"><a href="">&laquo; 上一页</a></li>
-    <li class="am-pagination-next"><a href="">下一页 &raquo;</a></li>
+    <li class="am-pagination-prev"><a id="page-prev" href="javascript:">&laquo; 上一页</a></li>
+    <li class="am-pagination-next"><a id="page-next" href="javascript:">下一页 &raquo;</a></li>
 </ul>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function() {
+            var url = window.location.href;
+            if (url.indexOf("page") >= 0) {
+                url = url.substring(0, url.indexOf("page") - 1);
+            }
+            var pagePrev = "@ViewBag.PagePrev";
+            var pageNext = "@ViewBag.PageNext";
+            if (pagePrev.length === 0) {
+                $("#page-prev").parent().addClass("am-disabled");
+            } else {
+                $("#page-prev").click(function () {
+                    if(url.indexOf("?") < 0)
+                        window.location.href = url + "?page=" + pagePrev;
+                    else
+                        window.location.href = url + "&page=" + pagePrev;
+                });
+            }
+            if (pageNext.length === 0) {
+                $("#page-next").parent().addClass("am-disabled");
+            } else {
+                $("#page-next").click(function () {
+                    if (url.indexOf("?") < 0)
+                        window.location.href = url + "?page=" + pageNext;
+                    else
+                        window.location.href = url + "&page=" + pageNext;
+                });
+            }
+        });
+    </script>
+}
