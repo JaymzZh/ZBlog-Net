@@ -18,6 +18,15 @@
         <span class="article-date"><i class="am-icon-calendar"></i> @Model.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
         <span class="article-user"><i class="am-icon-user"></i> <a asp-controller="Home" asp-action="Users" asp-route-name="@Model.User.NickName">@Model.User?.NickName</a></span>
         <span class="article-catalog"><i class="am-icon-folder-open-o"></i> <a asp-controller="Home" asp-action="Catalog" asp-route-title="@Model.Catalog?.Title">@Model.Catalog?.Title</a></span>
+    </h4>
+
+    <div class="am-g blog-content">
+        <div class="am-u-sm-12">
+            @Html.Raw(CommonMarkConverter.Convert(Model.Content))
+        </div>
+    </div>
+    
+    <h4 class="am-article-meta blog-meta">
         <span class="article-tag">
             <i class="am-icon-tags"></i>
             @foreach (var tag in Model.PostTags)
@@ -28,12 +37,6 @@
             }
         </span>
     </h4>
-
-    <div class="am-g blog-content">
-        <div class="am-u-sm-12">
-            @Html.Raw(CommonMarkConverter.Convert(Model.Content))
-        </div>
-    </div>
 </article>
 <hr class="am-article-divider blog-hr">
 
