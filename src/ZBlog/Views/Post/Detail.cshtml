@@ -1,0 +1,43 @@
+@model Post
+
+@using CommonMark
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<article class="blog-main">
+    <h3 class="am-article-title blog-title">
+        <a asp-controller="Post" asp-action="Detail" asp-route-url="@Model.Url">@Model.Title</a>
+        @if (Html.IsAdmin())
+        {
+            <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id" title="Edit"><i class="am-icon-btn am-success am-icon-edit"></i></a>
+        }
+    </h3>
+    <h4 class="am-article-meta blog-meta">
+        <span class="article-date"><i class="am-icon-calendar"></i> @Model.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
+        <span class="article-user"><i class="am-icon-user"></i> <a asp-controller="Home" asp-action="Users" asp-route-name="@Model.User.NickName">@Model.User?.NickName</a></span>
+        <span class="article-catalog"><i class="am-icon-folder-open-o"></i> <a asp-controller="Home" asp-action="Catalog" asp-route-title="@Model.Catalog?.Title">@Model.Catalog?.Title</a></span>
+        <span class="article-tag">
+            <i class="am-icon-tags"></i>
+            @foreach (var tag in Model.PostTags)
+            {
+                <span class="am-badge am-badge-success">
+                    <a asp-controller="Home" asp-action="Tag" asp-route-name="@tag.Tag?.Name">@tag.Tag?.Name</a>
+                </span>
+            }
+        </span>
+    </h4>
+
+    <div class="am-g blog-content">
+        <div class="am-u-sm-12">
+            @Html.Raw(CommonMarkConverter.Convert(Model.Content))
+        </div>
+    </div>
+</article>
+<hr class="am-article-divider blog-hr">
+
+<ul class="am-pagination blog-pagination">
+    <li class="am-pagination-prev"><a id="page-prev" href="javascript:">&laquo; 上一页</a></li>
+    <li class="am-pagination-next"><a id="page-next" href="javascript:">下一页 &raquo;</a></li>
+</ul>

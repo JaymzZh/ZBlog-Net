@@ -47,6 +47,27 @@ namespace ZBlog.Controllers
             return View(posts);
         }
 
+        // GET: /Post/{Url}
+        [Route("Post/{Url}")]
+        public async Task<IActionResult> Detail(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return HttpNotFound();
+
+            var post =
+                await
+                    _dbContext.Posts.Include(p => p.Catalog)
+                        .Include(p => p.PostTags)
+                        .ThenInclude(p => p.Tag)
+                        .Include(p => p.User)
+                        .OrderByDescending(p => p.CreateTime)
+                        .SingleOrDefaultAsync(p => p.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+            
+            //todo add prev/next post
+
+            return View(post);
+        }
+
         // GET: /Post/New
         [AdminRequired]
         public async Task<IActionResult> New()
