@@ -29,6 +29,8 @@ namespace ZBlog.Controllers
 
             var result = await GetPagedResult(page, posts);
 
+            ViewData["Title"] = "Home";
+
             return View(result);
         }
 
@@ -46,6 +48,8 @@ namespace ZBlog.Controllers
             .OrderByDescending(p => p.CreateTime);
 
             var result = await GetPagedResult(page, posts);
+
+            ViewData["Title"] = title;
 
             return View("Index" , result);
         }
@@ -65,6 +69,8 @@ namespace ZBlog.Controllers
 
             var result = await GetPagedResult(page, posts);
 
+            ViewData["Title"] = name;
+
             return View("Index" , result);
         }
 
@@ -82,6 +88,8 @@ namespace ZBlog.Controllers
             .OrderByDescending(p => p.CreateTime);
 
             var result = await GetPagedResult(page, posts);
+
+            ViewData["Title"] = name;
 
             return View("Index" , result);
         }
