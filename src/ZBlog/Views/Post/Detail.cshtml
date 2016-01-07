@@ -18,7 +18,7 @@
         <span class="article-date"><i class="am-icon-calendar"></i> @Model.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
         <span class="article-user"><i class="am-icon-user"></i> <a asp-controller="Home" asp-action="Users" asp-route-name="@Model.User.NickName">@Model.User?.NickName</a></span>
         <span class="article-catalog"><i class="am-icon-folder-open-o"></i> <a asp-controller="Home" asp-action="Catalog" asp-route-title="@Model.Catalog?.Title">@Model.Catalog?.Title</a></span>
-        <span class="article-comment"><i class="am-icon-comments-o"></i><a href="/Post/@Model.Url#disqus_thread" title="评论">评论</a></span>
+        <span class="article-comment"><i class="am-icon-comments-o"></i><a href="/Post/@Model.Url#disqus_thread">评论</a></span>
     </h4>
 
     <div class="am-g blog-content">
