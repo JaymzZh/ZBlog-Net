@@ -60,9 +60,15 @@ namespace ZBlog.Controllers
                         .Include(p => p.PostTags)
                         .ThenInclude(p => p.Tag)
                         .Include(p => p.User)
-                        .OrderByDescending(p => p.CreateTime)
                         .SingleOrDefaultAsync(p => p.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
-            
+
+            if (post == null)
+                return HttpNotFound();
+
+            post.Visits += 1;
+            _dbContext.Posts.Update(post);
+            await _dbContext.SaveChangesAsync();
+
             //todo add prev/next post
 
             return View(post);
