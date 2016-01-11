@@ -46,7 +46,7 @@ namespace ZBlog.Controllers
 
             return View(posts);
         }
-
+        
         // GET: /Post/{Url}
         [Route("Post/{Url}")]
         public async Task<IActionResult> Detail(string url)
@@ -76,6 +76,7 @@ namespace ZBlog.Controllers
 
         // GET: /Post/New
         [AdminRequired]
+        [Route("/Post/New")]
         public async Task<IActionResult> New()
         {
             ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync();
@@ -85,6 +86,7 @@ namespace ZBlog.Controllers
         // POST: /Post/New
         [HttpPost]
         [AdminRequired]
+        [Route("/Post/New")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(Post model, string tags, CancellationToken requestAborted)
         {
@@ -96,22 +98,21 @@ namespace ZBlog.Controllers
                 model.Summary = model.Content.Substring(0, length >= 100 ? 100 : length);
                 model.User = await GetCurrentUserAsync();
                 _dbContext.Add(model);
-                await _dbContext.SaveChangesAsync(requestAborted);
                 if (!string.IsNullOrWhiteSpace(tags))
                 {
                     await UpdatePostTags(model, tags, requestAborted);
                 }
+                await _dbContext.SaveChangesAsync(requestAborted);
                 _logger.LogDebug($"New post<{model.Title}>.");
                 return RedirectToAction(nameof(Index), new { Message = ManageMessageId.PostNewSuccess });
             }
-            var catalog = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync(requestAborted);
-            ViewBag.Catalogs = catalog;
+            ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync(requestAborted);
             return View(model);
         }
 
         // GET: /Post/Edit/id
         [AdminRequired]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, CancellationToken requestAborted)
         {
             _logger.LogDebug($"Edit post<{id}>");
 
@@ -123,7 +124,7 @@ namespace ZBlog.Controllers
             var post = await _dbContext.Posts.Include(p => p.Catalog)
                 .Include(p => p.PostTags)
                 .ThenInclude(p => p.Tag)
-                .Include(p => p.User).SingleOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.User).SingleOrDefaultAsync(p => p.Id == id, requestAborted);
 
             if (post == null)
             {
@@ -132,7 +133,7 @@ namespace ZBlog.Controllers
 
             ViewData["Title"] = $"Post Edit<{post.Title}>";
             
-            ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync();
+            ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync(requestAborted);
 
             return View(post);
         }
@@ -150,9 +151,10 @@ namespace ZBlog.Controllers
                 model.Summary = model.Content.Substring(0, length >= 100 ? 100 : length);
                 model.User = await GetCurrentUserAsync();
                 _dbContext.Update(model);
-                await _dbContext.SaveChangesAsync(requestAborted);
                 
                 await UpdatePostTags(model, tags, requestAborted);
+
+                await _dbContext.SaveChangesAsync(requestAborted);
                 
                 _logger.LogDebug($"Updated post<{model.Title}>");
 
@@ -221,14 +223,13 @@ namespace ZBlog.Controllers
             var postTags = _dbContext.PostTags.Where(p => p.PostId == model.Id);
             _logger.LogDebug($"Remove posttags count:{postTags.Count()}");
             _dbContext.PostTags.RemoveRange(postTags);
-            await _dbContext.SaveChangesAsync(requestAborted);
 
             var tagArray = tags.Split(new[] {',', '，', ' '}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var t in tagArray)
             {
                 var postTag = new PostTag
                 {
-                    PostId = model.Id
+                    Post = model
                 };
                 var tag =
                     await _dbContext.Tags.FirstOrDefaultAsync(
@@ -240,12 +241,10 @@ namespace ZBlog.Controllers
                         Name = t
                     };
                     _dbContext.Add(tag);
-                    await _dbContext.SaveChangesAsync(requestAborted);
                 }
-                postTag.TagId = tag.Id;
+                postTag.Tag = tag;
                 _dbContext.Add(postTag);
             }
-            await _dbContext.SaveChangesAsync(requestAborted);
         }
 
         #region Helpers
