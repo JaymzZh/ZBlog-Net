@@ -39,6 +39,6 @@
     color: #ffffff;
 }
 
-.article-date, .article-user, .article-catalog, .article-tag {
+.article-date, .article-user, .article-catalog, .article-tag, .article-comment, .article-visits {
     margin-right: 17px;
 }
