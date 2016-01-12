@@ -1,5 +1,4 @@
-﻿@model IndexViewModel
-@{
+﻿@{
     ViewData["Title"] = "Manage your account";
 }
 
@@ -12,14 +11,7 @@
         <dt>Password:</dt>
         <dd>
             [
-            @if (Model.HasPassword)
-            {
-                <a asp-controller="Manage" asp-action="ChangePassword">Change</a>
-            }
-            else
-            {
-                <a asp-controller="Manage" asp-action="SetPassword">Create</a>
-            }
+                <a asp-controller="Admin" asp-action="ChangePassword">Change</a>
             ]
         </dd>
     </dl>

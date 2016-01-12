@@ -91,7 +91,7 @@ namespace ZBlog.Controllers
                 : "";
 
             var user = await GetCurrentUserAsync();
-            return View();
+            return View(user);
         }
 
         //
