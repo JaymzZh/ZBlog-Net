@@ -1,4 +1,13 @@
 ﻿{
+  "AppSettings": {
+    "SiteTitle": "ZBlog",
+    "User": {
+      "Name": "zhangmm",
+      "NickName": "Jeffiy",
+      "Email": "zhangmin6105@qq.com",
+      "Password": "123150"
+    }
+  },
   "Data": {
     "DefaultConnection": {
       "ConnectionString": "Data source=zblog.db"
@@ -11,11 +20,5 @@
       "System": "Information",
       "Microsoft": "Information"
     }
-  },
-  "User": {
-    "Name": "zhangmm",
-    "NickName": "Jeffiy",
-    "Email": "zhangmin6105@qq.com",
-    "Password": "123150"
   }
 }

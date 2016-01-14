@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ZBlog.Common;
 
@@ -10,7 +9,7 @@ namespace ZBlog.Models
 {
     public static class SampleData
     {
-        public static async Task InitializeZBlog(IServiceProvider serviceProvider, IConfiguration configuration, bool createUsers = true)
+        public static async Task InitializeZBlog(IServiceProvider serviceProvider, bool createUsers = true)
         {
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -21,7 +20,7 @@ namespace ZBlog.Models
                 {
                     if (createUsers)
                     {
-                        await CreateAdminUser(dbContext, configuration);
+                        await CreateAdminUser(dbContext, serverProvider);
                     }
                     await InsertTestData(serverProvider);
                 }
@@ -79,17 +78,18 @@ namespace ZBlog.Models
             await dbContext.SaveChangesAsync();
         }
 
-        private static async Task CreateAdminUser(ZBlogDbContext dbContext, IConfiguration configuration)
+        private static async Task CreateAdminUser(ZBlogDbContext dbContext, IServiceProvider serverProvider)
         {
+            AppSettings appSettings = serverProvider.GetRequiredService<AppSettings>();
             var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
             if (user == null)
             {
                 user = new User
                 {
-                    Name = configuration["User:Name"],
-                    NickName = configuration["User:NickName"],
-                    Email = configuration["User:Email"],
-                    Password = Util.GetMd5(configuration["User:Password"])
+                    Name = appSettings.UserInfo.Name,
+                    NickName = appSettings.UserInfo.NickName,
+                    Email = appSettings.UserInfo.Email,
+                    Password = Util.GetMd5(appSettings.UserInfo.Password)
                 };
                 dbContext.Users.Add(user);
                 await dbContext.SaveChangesAsync();

@@ -20,8 +20,8 @@ namespace ZBlog
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .SetBasePath(applicationEnvironment.ApplicationBasePath)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile("config.json")
+                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
             {
@@ -40,6 +40,8 @@ namespace ZBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             var useInMemoryStore = !_platform.IsRunningOnWindows
                    || _platform.IsRunningOnMono
                    || _platform.IsRunningOnNanoServer;
@@ -145,7 +147,7 @@ namespace ZBlog
                     template: "{controller}/{id?}");
             });
 
-            SampleData.InitializeZBlog(app.ApplicationServices, Configuration).Wait();
+            SampleData.InitializeZBlog(app.ApplicationServices).Wait();
         }
     }
 }

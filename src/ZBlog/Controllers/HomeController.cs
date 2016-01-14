@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
-using Microsoft.Extensions.Configuration;
 using ZBlog.Models;
 
 namespace ZBlog.Controllers
@@ -131,10 +130,10 @@ namespace ZBlog.Controllers
             return result;
         }
 
-        public IActionResult About([FromServices] IConfiguration configuration)
+        public IActionResult About(AppSettings appSettings)
         {
-            ViewData["About"] = configuration != null
-                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(configuration["User:Name"]))?.About ??
+            ViewData["About"] = appSettings != null
+                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(appSettings.UserInfo.Name))?.About ??
                      "Nothing here..."
                    : "Can't find the configuration.";
 
