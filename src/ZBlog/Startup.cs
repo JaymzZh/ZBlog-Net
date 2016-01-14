@@ -5,6 +5,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using ZBlog.Models;
 using ZBlog.Services;
 
@@ -12,10 +13,13 @@ namespace ZBlog
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        private readonly Platform _platform;
+
+        public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment, IRuntimeEnvironment runtimeEnvironment)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
+                .SetBasePath(applicationEnvironment.ApplicationBasePath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
@@ -27,6 +31,8 @@ namespace ZBlog
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            _platform = new Platform(runtimeEnvironment);
         }
 
         public IConfiguration Configuration { get; set; }
@@ -34,21 +40,53 @@ namespace ZBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddEntityFramework()
+            var useInMemoryStore = !_platform.IsRunningOnWindows
+                   || _platform.IsRunningOnMono
+                   || _platform.IsRunningOnNanoServer;
+
+            // Add EF services to the services container
+            if (useInMemoryStore)
+            {
+                services.AddEntityFramework()
+                        .AddInMemoryDatabase()
+                        .AddDbContext<ZBlogDbContext>(options =>
+                            options.UseInMemoryDatabase());
+            }
+            else
+            {
+                services.AddEntityFramework()
                 .AddSqlite()
                 .AddDbContext<ZBlogDbContext>(options =>
                     options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
-            
+            }
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://zhangmm.cn");
+                });
+            });
+
             services.AddMvc();
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Configure Auth
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "ManageZBlog",
+                    authBuilder => {
+                        authBuilder.RequireClaim("ManageZBlog", "Allowed");
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +100,7 @@ namespace ZBlog
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseRuntimeInfoPage();
             }
             else
             {
