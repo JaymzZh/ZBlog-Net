@@ -8,7 +8,8 @@ namespace ZBlog
         {
             var application = new WebApplicationBuilder()
                 .UseConfiguration(WebApplicationConfiguration.GetDefault(args))
-                .UseStartup("ZBlog")
+                .UseIISPlatformHandlerUrl()
+                .UseStartup<Startup>()
                 .Build();
 
             application.Run();

@@ -80,7 +80,10 @@ namespace ZBlog
                 catch { }*/
             }
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+            var options = new IISPlatformHandlerOptions();
+            options.AuthenticationDescriptions.Clear();
+
+            app.UseIISPlatformHandler(options);
 
             app.UseStaticFiles();
 
