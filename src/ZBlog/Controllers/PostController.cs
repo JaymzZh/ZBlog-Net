@@ -52,7 +52,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Detail(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
-                return HttpNotFound();
+                return HttpBadRequest();
 
             var post =
                 await
@@ -118,7 +118,7 @@ namespace ZBlog.Controllers
 
             if (!id.HasValue)
             {
-                return HttpNotFound();
+                return HttpBadRequest();
             }
 
             var post = await _dbContext.Posts.Include(p => p.Catalog)
@@ -174,7 +174,7 @@ namespace ZBlog.Controllers
 
             if (!id.HasValue)
             {
-                return HttpNotFound();
+                return HttpBadRequest();
             }
 
             var post = await _dbContext.Posts.SingleOrDefaultAsync(p => p.Id == id);

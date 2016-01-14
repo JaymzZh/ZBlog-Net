@@ -37,7 +37,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Catalog(string title, int? page = 1)
         {
             if (string.IsNullOrWhiteSpace(title))
-                return HttpNotFound();
+                return HttpBadRequest();
 
             var posts = _dbContext.Posts.Include(p => p.Catalog)
             .Include(p => p.PostTags)
@@ -57,7 +57,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Tag(string name, int? page = 1)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return HttpNotFound();
+                return HttpBadRequest();
 
             var posts = _dbContext.Posts.Include(p => p.Catalog)
             .Include(p => p.PostTags)
@@ -77,7 +77,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Users(string name, int? page = 1)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return HttpNotFound();
+                return HttpBadRequest();
 
             var posts = _dbContext.Posts.Include(p => p.Catalog)
             .Include(p => p.PostTags)
