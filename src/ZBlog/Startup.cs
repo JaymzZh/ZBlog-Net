@@ -74,7 +74,7 @@ namespace ZBlog
             services.AddCaching();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
-            services.AddSingleton(Configuration);
+//            services.AddSingleton(Configuration);
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
