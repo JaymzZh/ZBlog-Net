@@ -3,7 +3,7 @@
   "description": "A blog power by ASP.NET 5",
   "copyright": "zhangmm.cn Co.,Ltd",
   "authors": [ "Jeffiiy" ],
-  "tags": [ "Blog", "vNext", "ASP.Net", "MVC" ],
+  "tags": [ "Blog", "vNext", "ASP.NET 5", "MVC 6" ],
   "iconUrl": "http://zhangmm.cn/images/logo.png",
   "projectUrl": "https://github.com/Jeffiiy/ZBlog-Net",
   "licenseUrl": "https://github.com/Jeffiy/ZBlog-Net/blob/master/LICENSE.txt",
