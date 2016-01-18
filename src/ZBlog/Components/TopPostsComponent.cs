@@ -20,14 +20,11 @@ namespace ZBlog.Components
         {
             var posts =
                 await
-                    DbContext.Posts.Include(p => p.Catalog)
-                        .Include(p => p.PostTags)
-                        .ThenInclude(p => p.Tag)
-                        .Include(p => p.User)
+                    DbContext.Posts
                         .OrderByDescending(p => p.Visits)
                         .Take(10)
                         .ToListAsync();
-            
+
             return View(posts);
         }
     }
