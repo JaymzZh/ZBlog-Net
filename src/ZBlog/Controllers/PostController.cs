@@ -200,11 +200,12 @@ namespace ZBlog.Controllers
                         .SingleOrDefaultAsync(p => p.Id == id, requestAborted);
 
             _dbContext.Remove(post);
+            
             foreach (var postTag in post.PostTags)
             {
-                //when count of the tag' posts less 1, then delete it.
+                //when the count of tag' posts less 1, then delete it.
                 var tag = await _dbContext.Tags.Include(t => t.PostTags).SingleOrDefaultAsync(p => p.Id == postTag.TagId, requestAborted);
-                if (tag.PostTags.Count <= 1)
+                if (tag.PostTags.Count < 1)
                 {
                     _dbContext.Remove(tag);
                 }
