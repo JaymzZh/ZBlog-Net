@@ -112,11 +112,11 @@ namespace ZBlog.Controllers
 
         // GET: /Post/Edit/id
         [AdminRequired]
-        public async Task<IActionResult> Edit(int? id, CancellationToken requestAborted)
+        public async Task<IActionResult> Edit(int? id)
         {
             _logger.LogDebug($"Edit post<{id}>");
 
-            if (!id.HasValue)
+            if (!id.HasValue || id <= 0)
             {
                 return HttpBadRequest();
             }
@@ -124,7 +124,7 @@ namespace ZBlog.Controllers
             var post = await _dbContext.Posts.Include(p => p.Catalog)
                 .Include(p => p.PostTags)
                 .ThenInclude(p => p.Tag)
-                .Include(p => p.User).SingleOrDefaultAsync(p => p.Id == id, requestAborted);
+                .Include(p => p.User).SingleOrDefaultAsync(p => p.Id == id);
 
             if (post == null)
             {
@@ -133,7 +133,7 @@ namespace ZBlog.Controllers
 
             ViewData["Title"] = $"Post Edit<{post.Title}>";
             
-            ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync(requestAborted);
+            ViewBag.Catalogs = await _dbContext.Catalogs.OrderByDescending(c => c.PRI).ToListAsync();
 
             return View(post);
         }
@@ -172,7 +172,7 @@ namespace ZBlog.Controllers
         {
             _logger.LogDebug($"Delete post<{id}>");
 
-            if (!id.HasValue)
+            if (!id.HasValue || id <= 0)
             {
                 return HttpBadRequest();
             }
@@ -184,7 +184,7 @@ namespace ZBlog.Controllers
                 return HttpNotFound();
             }
 
-            ViewData["Title"] = $"Post Delete<{post.Title}> Confirmation";
+            ViewData["Title"] = $"Post<{post.Title}> Delete Confirmation";
             
             return View(post);
         }
@@ -193,10 +193,14 @@ namespace ZBlog.Controllers
         [HttpPost]
         [AdminRequired]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, CancellationToken requestAborted)
+        public async Task<IActionResult> Delete(int? id, CancellationToken requestAborted)
         {
+            if (!id.HasValue || id <= 0)
+            {
+                return HttpBadRequest();
+            }
+
             var post = await _dbContext.Posts.Include(p => p.PostTags)
-                        .OrderByDescending(p => p.CreateTime)
                         .SingleOrDefaultAsync(p => p.Id == id, requestAborted);
 
             _dbContext.Remove(post);
