@@ -1,0 +1,36 @@
+﻿@model Catalog
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Catalog" asp-action="Edit" method="post" class="form-horizontal" role="form">
+    <hr />
+    <div asp-validation-summary="All" class="am-text-danger"></div>
+    <input asp-for="Id" class="am-form-field" type="hidden" />
+    <div class="am-form-group">
+        <label asp-for="Title" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Title" class="am-form-field" placeholder="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label asp-for="Url" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Url" class="am-form-field" placeholder="Catalog url" />
+            <span asp-validation-for="Url" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <label asp-for="PRI" class="col-md-2 am-form-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PRI" class="am-form-field" placeholder="Catalog order" />
+            <span asp-validation-for="PRI" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="am-form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="am-btn am-btn-primary">Submit</button>
+            <button type="button" class="am-btn am-btn-secondary" onclick="window.history.go(-1);">Cancel</button>
+        </div>
+    </div>
+</form>

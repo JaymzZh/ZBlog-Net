@@ -1,0 +1,35 @@
+﻿@model List<Catalog>
+@{
+    ViewData["Title"] = "Catalog List";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p class="am-text-success">@ViewData["StatusMessage"]</p>
+<div>
+    <table class="am-table am-table-bordered am-table-striped am-table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Url</th>
+                <th>PRI</th>
+                <th>PostCount</th>
+                <th>Manage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Catalog catalog in Model)
+            {
+                <tr>
+                    <td>@catalog.Title</td>
+                    <td>@catalog.Url</td>
+                    <td>@catalog.PRI</td>
+                    <td>@catalog.Posts.Count</td>
+                    <td>
+                        <a asp-controller="Catalog" asp-action="Edit" asp-route-id="@catalog.Id">Edit</a>
+                        <a asp-controller="Catalog" asp-action="Delete" asp-route-id="@catalog.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
