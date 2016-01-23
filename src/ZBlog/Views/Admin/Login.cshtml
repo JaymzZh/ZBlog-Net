@@ -7,25 +7,25 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Admin" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+<form asp-controller="Admin" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="am-form am-form-horizontal" role="form">
     <hr/>
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <div asp-validation-summary="All" class="am-text-danger"></div>
     <div class="am-form-group">
-        <label asp-for="Email" class="col-md-2 am-form-label"></label>
-        <div class="col-md-10">
+        <label asp-for="Email" class="am-u-md-2 am-form-label"></label>
+        <div class="am-u-md-10">
             <input asp-for="Email" class="am-form-field"/>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="am-form-group">
-        <label asp-for="Password" class="col-md-2 am-form-label"></label>
-        <div class="col-md-10">
+        <label asp-for="Password" class="am-u-md-2 am-form-label"></label>
+        <div class="am-u-md-10">
             <input asp-for="Password" class="am-form-field"/>
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
     </div>
     <div class="am-form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div class="am-u-md-offset-2 am-u-md-10">
             <div class="checkbox">
                 <input asp-for="RememberMe"/>
                 <label asp-for="RememberMe"></label>
@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="am-form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div class="am-u-md-offset-2 am-u-md-10">
             <button type="submit" class="am-btn am-btn-primary">Log in</button>
         </div>
     </div>

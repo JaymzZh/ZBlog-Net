@@ -7,12 +7,10 @@
     <strong>@Model.Title</strong>?
 </p>
 
-<form asp-controller="Catalog" asp-action="Delete" method="post" class="form-horizontal" role="form">
+<form asp-controller="Catalog" asp-action="Delete" method="post" class="am-form am-form-horizontal" role="form">
     <hr />
     <div class="am-form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="am-btn am-btn-primary">Delete</button>
-            <button type="button" class="am-btn am-btn-secondary" onclick="window.history.go(-1);">Cancel</button>
-        </div>
+        <button type="submit" class="am-btn am-btn-primary">Delete</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="window.history.go(-1);">Cancel</button>
     </div>
 </form>
