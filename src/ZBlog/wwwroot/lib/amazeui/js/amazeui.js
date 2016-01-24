@@ -1,4 +1,4 @@
-/*! Amaze UI v2.5.0 | by Amaze UI Team | (c) 2015 AllMobilize, Inc. | Licensed under MIT | 2015-11-30T17:43:07+0800 */ 
+/*! Amaze UI v2.5.1 | by Amaze UI Team | (c) 2016 AllMobilize, Inc. | Licensed under MIT | 2016-01-19T14:45:42+0800 */ 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("jquery"));
@@ -140,7 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var doc = window.document;
 	var $html = $('html');
 
-	UI.VERSION = '2.5.0';
+	UI.VERSION = '2.5.1';
 
 	UI.support = {};
 
@@ -7958,8 +7958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  // Close Modal when button clicked
-	  $element.find('[data-am-modal-close], .am-modal-btn').
-	    on('click.close.modal.amui', function(e) {
+	  $element.on('click.close.modal.amui', '[data-am-modal-close], .am-modal-btn', function(e) {
 	      e.preventDefault();
 	      var $this = $(this);
 
@@ -14352,9 +14351,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Adding 'am-nohover' class for touch devices
 	    if (UI.support.touch) {
 	      this.parent().hover(function() {
-	        this.addClass('am-nohover');
+	        $(this).addClass('am-nohover');
 	      }, function() {
-	        this.removeClass('am-nohover');
+	        $(this).removeClass('am-nohover');
 	      });
 	    }
 	  }
@@ -14464,7 +14463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  submit: null
 	};
 
-	Validator.VERSION = '2.5.0';
+	Validator.VERSION = '2.5.1';
 
 	/* jshint -W101 */
 	Validator.patterns = {

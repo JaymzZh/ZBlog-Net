@@ -1,4 +1,4 @@
-/*! Amaze UI v2.5.0 | by Amaze UI Team | (c) 2015 AllMobilize, Inc. | Licensed under MIT | 2015-11-30T17:43:07+0800 */
+/*! Amaze UI v2.5.1 | by Amaze UI Team | (c) 2016 AllMobilize, Inc. | Licensed under MIT | 2016-01-19T14:45:42+0800 */
 /* ==========================================================================
    Component: Base
  ============================================================================ */
@@ -6879,25 +6879,33 @@ a.am-close:hover {
   padding: 1rem;
 }
 /* with border */
-.am-list-border > li {
+.am-list-border > li,
+.am-list-bordered > li {
   border-width: 1px;
 }
 .am-list-border > li:first-child,
-.am-list-border > li:first-child > a {
+.am-list-bordered > li:first-child,
+.am-list-border > li:first-child > a,
+.am-list-bordered > li:first-child > a {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
 .am-list-border > li:last-child,
-.am-list-border > li:last-child > a {
+.am-list-bordered > li:last-child,
+.am-list-border > li:last-child > a,
+.am-list-bordered > li:last-child > a {
   margin-bottom: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.am-list-border > li > a {
+.am-list-border > li > a,
+.am-list-bordered > li > a {
   padding: 1rem;
 }
 .am-list-border > li > a:hover,
-.am-list-border > li > a:focus {
+.am-list-bordered > li > a:hover,
+.am-list-border > li > a:focus,
+.am-list-bordered > li > a:focus {
   background-color: #f5f5f5;
 }
 /* Striped */
@@ -9190,6 +9198,7 @@ ul.am-dropdown-content > .am-disabled > a:focus {
 .am-popup-hd {
   position: absolute;
   top: 0;
+  z-index: 1000;
   width: 100%;
   height: 43px;
   border-bottom: 1px solid #dedede;
@@ -9525,6 +9534,7 @@ ul.am-dropdown-content > .am-disabled > a:focus {
  ============================================================================ */
 .am-tabs-bd {
   position: relative;
+  overflow: hidden;
   border: 1px solid #ddd;
   border-top: none;
   z-index: 100;
