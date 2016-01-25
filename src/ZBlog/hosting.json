@@ -1,3 +1,4 @@
 ﻿{
-  "server": "Microsoft.AspNet.Server.Kestrel"
+  "Environment": "Development",
+  "server": "Microsoft.AspNetCore.Server.Kestrel"
 }
