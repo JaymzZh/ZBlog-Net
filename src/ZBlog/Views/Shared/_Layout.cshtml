@@ -72,6 +72,9 @@
                     </div>
                 </section>
                 <section class="am-panel am-panel-default">
+                    @await Component.InvokeAsync("Catalog")
+                </section>
+                <section class="am-panel am-panel-default">
                     @await Component.InvokeAsync("TopPosts")
                 </section>
             </div>

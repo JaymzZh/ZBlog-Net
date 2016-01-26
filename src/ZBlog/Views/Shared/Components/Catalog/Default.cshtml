@@ -1,0 +1,12 @@
+﻿@model List<Catalog>
+
+<div class="am-panel-hd">Catalog</div>
+<div class="am-panel-bd">
+    @foreach (var catalog in Model)
+    {
+        <a asp-controller="Home" asp-action="Catalog" asp-route-title="@catalog.Url">
+            @catalog.Title
+            <span class="am-badge am-badge-secondary am-round">@catalog.Posts.Count()</span>
+        </a> 
+    }
+</div>
