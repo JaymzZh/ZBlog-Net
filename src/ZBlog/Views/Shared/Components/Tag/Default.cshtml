@@ -1,0 +1,12 @@
+﻿@model List<Tag>
+
+<div class="am-panel-hd">Tag</div>
+<div class="am-panel-bd">
+    @foreach (var tag in Model)
+    {
+        <a asp-controller="Home" asp-action="Tag" asp-route-name="@tag.Name">
+            @tag.Name
+            <span class="am-badge am-badge-secondary am-round">@tag.PostTags.Count()</span>
+        </a>
+    }
+</div>

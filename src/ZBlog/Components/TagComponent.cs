@@ -5,10 +5,10 @@ using ZBlog.Models;
 
 namespace ZBlog.Components
 {
-    [ViewComponent(Name = "Catalog")]
-    public class CatalogComponent : ViewComponent
+    [ViewComponent(Name = "Tag")]
+    public class TagComponent : ViewComponent
     {
-        public CatalogComponent(ZBlogDbContext dbContext)
+        public TagComponent(ZBlogDbContext dbContext)
         {
             DbContext = dbContext;
         }
@@ -17,9 +17,9 @@ namespace ZBlog.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var catalogs = await DbContext.Catalogs.Include(c => c.Posts).ToListAsync();
+            var tags = await DbContext.Tags.Include(c => c.PostTags).ToListAsync();
 
-            return View(catalogs);
+            return View(tags);
         }
     }
 }

@@ -72,6 +72,9 @@
                     </div>
                 </section>
                 <section class="am-panel am-panel-default">
+                    @await Component.InvokeAsync("Tag")
+                </section>
+                <section class="am-panel am-panel-default">
                     @await Component.InvokeAsync("Catalog")
                 </section>
                 <section class="am-panel am-panel-default">
@@ -85,7 +88,7 @@
 
     <footer class="blog-footer">
         <p>
-            <a href="https:\\github.com\Jeffiy\ZBlog-Net" target="_blank">ZBlog</a> powered by ASP.NET 5<br />
+            <a href="https:\\github.com\Jeffiy\ZBlog-Net" target="_blank">ZBlog</a> powered by ASP.NET Core 1.0<br />
             <small>&copy; 2015 - ZBlog.</small>
         </p>
     </footer>
