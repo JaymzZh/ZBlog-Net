@@ -52,7 +52,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Detail(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
-                return HttpBadRequest();
+                return BadRequest();
 
             var post =
                 await
@@ -63,7 +63,7 @@ namespace ZBlog.Controllers
                         .SingleOrDefaultAsync(p => p.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
 
             if (post == null)
-                return HttpNotFound();
+                return NotFound();
 
             post.Visits += 1;
             _dbContext.Posts.Update(post);
@@ -118,7 +118,7 @@ namespace ZBlog.Controllers
 
             if (!id.HasValue || id <= 0)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             var post = await _dbContext.Posts.Include(p => p.Catalog)
@@ -128,7 +128,7 @@ namespace ZBlog.Controllers
 
             if (post == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             ViewData["Title"] = $"Post Edit<{post.Title}>";
@@ -174,14 +174,14 @@ namespace ZBlog.Controllers
 
             if (!id.HasValue || id <= 0)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             var post = await _dbContext.Posts.SingleOrDefaultAsync(p => p.Id == id);
 
             if (post == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             ViewData["Title"] = $"Post<{post.Title}> Delete Confirmation";
@@ -197,7 +197,7 @@ namespace ZBlog.Controllers
         {
             if (!id.HasValue || id <= 0)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             var post = await _dbContext.Posts.Include(p => p.PostTags)
