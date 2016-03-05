@@ -5,6 +5,10 @@
     "emitEntryPoint": true,
     "warningsAsErrors": true
   },
+  "tools": {
+     "dotnet-publish-iis": "1.0.0-*",
+     "dotnet-razor-tooling": "1.0.0-*"
+    },
   "dependencies": {
     "Microsoft.EntityFrameworkCore.InMemory": "1.0.0-*",
     "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0-*",
@@ -16,7 +20,6 @@
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-*",
     "Microsoft.AspNetCore.Server.WebListener": "0.1.0-*",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0-*",
-    "Microsoft.AspNetCore.Tooling.Razor": "1.0.0-*",
     "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-*",
     "Microsoft.Extensions.Configuration": "1.0.0-*",
     "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-*",
