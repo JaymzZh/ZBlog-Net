@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ZBlog.Models
 {
@@ -13,10 +14,22 @@ namespace ZBlog.Models
         public DbSet<PostTag> PostTags { get; set; }
 
         public DbSet<Catalog> Catalogs { get; set; }
-        
+
+        public ZBlogDbContext(DbContextOptions<ZBlogDbContext> options)
+            : base(options)
+        {
+            
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            foreach (var entity in builder.Model.GetEntityTypes())
+            {
+                entity.Relational().TableName = entity.DisplayName();
+            }
+
 
             builder.Entity<Catalog>(e =>
             {

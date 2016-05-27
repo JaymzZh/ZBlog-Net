@@ -8,6 +8,8 @@ namespace ZBlog
     {
         // Defined in winnt.h
         private const int PRODUCT_NANO_SERVER = 0x0000006D;
+        private const int PRODUCT_DATACENTER_NANO_SERVER = 0x0000008F;
+        private const int PRODUCT_STANDARD_NANO_SERVER = 0x00000090;
 
         [DllImport("api-ms-win-core-sysinfo-l1-2-1.dll", SetLastError = false)]
         private static extern bool GetProductInfo(
@@ -17,16 +19,9 @@ namespace ZBlog
               int dwSpMinorVersion,
               out int pdwReturnedProductType);
 
-        private readonly IRuntimeEnvironment _runtimeEnvironment;
-
         private bool? _isNano;
         private bool? _isMono;
         private bool? _isWindows;
-
-        public Platform(IRuntimeEnvironment runtimeEnvironment)
-        {
-            _runtimeEnvironment = runtimeEnvironment;
-        }
 
         public bool IsRunningOnWindows
         {
@@ -34,7 +29,7 @@ namespace ZBlog
             {
                 if (_isWindows == null)
                 {
-                    _isWindows = _runtimeEnvironment.OperatingSystem.Equals(
+                    _isWindows = PlatformServices.Default.Runtime.OperatingSystem.Equals(
                         "Windows", StringComparison.OrdinalIgnoreCase);
                 }
 
@@ -48,7 +43,10 @@ namespace ZBlog
             {
                 if (_isMono == null)
                 {
-                    _isMono = _runtimeEnvironment.RuntimeType.Equals("Mono", StringComparison.OrdinalIgnoreCase);
+                    _isMono = string.Equals(
+                        PlatformServices.Default.Runtime.RuntimeType,
+                        "Mono",
+                        StringComparison.OrdinalIgnoreCase);
                 }
 
                 return _isMono.Value;
@@ -61,14 +59,16 @@ namespace ZBlog
             {
                 if (_isNano == null)
                 {
-                    var osVersion = new Version(_runtimeEnvironment.OperatingSystemVersion ?? "");
+                    var osVersion = new Version(PlatformServices.Default.Runtime.OperatingSystemVersion ?? "");
 
                     try
                     {
                         int productType;
                         if (GetProductInfo(osVersion.Major, osVersion.Minor, 0, 0, out productType))
                         {
-                            _isNano = productType == PRODUCT_NANO_SERVER;
+                            _isNano = productType == PRODUCT_NANO_SERVER ||
+                                productType == PRODUCT_DATACENTER_NANO_SERVER ||
+                                productType == PRODUCT_STANDARD_NANO_SERVER;
                         }
                         else
                         {
@@ -87,5 +87,7 @@ namespace ZBlog
             }
         }
 
+        // Sql client not available on mono, non-windows, or nano
+        public bool UseInMemoryStore => !IsRunningOnWindows || IsRunningOnMono || IsRunningOnNanoServer;
     }
 }

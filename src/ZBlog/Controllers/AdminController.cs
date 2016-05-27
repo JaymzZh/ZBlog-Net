@@ -49,7 +49,7 @@ namespace ZBlog.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _dbContext.Users.Where(u => u.Email.Equals(model.Email) && u.Password.Equals(Util.GetMd5(model.Password))).FirstAsync();
+                var user = await _dbContext.Users.Where(u => u.Email.Equals(model.Email) && u.Password.Equals(Util.GetMd5(model.Password))).FirstOrDefaultAsync();
                 if (null != user)
                 {
                     _logger.LogInformation(1, "User logged in.");

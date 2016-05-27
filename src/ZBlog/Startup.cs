@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using ZBlog.Models;
 using ZBlog.Services;
 
@@ -15,24 +14,24 @@ namespace ZBlog
     {
         private readonly Platform _platform;
 
-        public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment, IRuntimeEnvironment runtimeEnvironment)
+        public Startup(IHostingEnvironment hostingEnvironment)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(applicationEnvironment.ApplicationBasePath)
+                .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("config.json")
-                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"config.{hostingEnvironment.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
-            if (env.IsDevelopment())
+            if (hostingEnvironment.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
             }
-
-            builder.AddEnvironmentVariables();
+            
             Configuration = builder.Build();
 
-            _platform = new Platform(runtimeEnvironment);
+            _platform = new Platform();
         }
 
         public IConfiguration Configuration { get; set; }
@@ -41,27 +40,10 @@ namespace ZBlog
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
-            var useInMemoryStore = !_platform.IsRunningOnWindows
-                   || _platform.IsRunningOnMono
-                   || _platform.IsRunningOnNanoServer;
-
-            // Add EF services to the services container
-            if (useInMemoryStore)
-            {
-                services.AddEntityFramework()
-                        .AddInMemoryDatabase()
-                        .AddDbContext<ZBlogDbContext>(options =>
-                            options.UseInMemoryDatabase());
-            }
-            else
-            {
-                services.AddEntityFramework()
-                .AddSqlite()
-                .AddDbContext<ZBlogDbContext>(options =>
-                    options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
-            }
-
+            
+            services.AddDbContext<ZBlogDbContext>(options =>
+                options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -71,10 +53,11 @@ namespace ZBlog
             });
 
             services.AddMvc();
-            services.AddCaching();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
-//            services.AddSingleton(Configuration);
+            services.AddSingleton(Configuration);
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -92,12 +75,12 @@ namespace ZBlog
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if (hostingEnvironment.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
@@ -120,12 +103,7 @@ namespace ZBlog
                 }
                 catch { }*/
             }
-
-            var options = new IISPlatformHandlerOptions();
-            options.AuthenticationDescriptions.Clear();
-
-            app.UseIISPlatformHandler(options);
-
+            
             app.UseStaticFiles();
 
             app.UseSession();
@@ -134,10 +112,10 @@ namespace ZBlog
             
             app.UseMvc(routes =>
             {
-                /*routes.MapRoute(
+                routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area:exists}/{controller=Home}/{action=Index}");*/
-                
+                    template: "{area:exists}/{controller=Home}/{action=Index}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

@@ -2,7 +2,7 @@
   "AppSettings": {
     "SiteTitle": "ZBlog",
     "AboutMeInShort": "90后，逗比青年一枚，目前任职程序猿，主攻NET。",
-    "User": {
+    "UserInfo": {
       "Name": "zhangmm",
       "NickName": "Jeffiy",
       "Email": "zhangmin6105@qq.com",
@@ -11,7 +11,7 @@
   },
   "Data": {
     "DefaultConnection": {
-      "ConnectionString": "Data source=zblog.db"
+      "ConnectionString": "Filename=./zblog.db"
     }
   },
   "Logging": {

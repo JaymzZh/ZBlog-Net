@@ -68,13 +68,13 @@ namespace ZBlog.Controllers
             _logger.LogDebug($"Edit catalog<{id}>");
 
             if (!id.HasValue || id <= 0)
-                return HttpBadRequest();
+                return BadRequest();
 
             var catalog = await _dbContext.Catalogs.FirstOrDefaultAsync(c => c.Id == id);
 
             if (catalog == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             ViewData["Title"] = $"Catalog Edit<{catalog.Title}>";
@@ -108,11 +108,11 @@ namespace ZBlog.Controllers
             _logger.LogDebug($"Delete catalog<{id}>");
 
             if (!id.HasValue || id <= 0)
-                return HttpBadRequest();
+                return BadRequest();
 
             var catalog = await _dbContext.Catalogs.FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (catalog == null)
-                return HttpNotFound();
+                return NotFound();
 
             ViewData["Title"] = $"Catalog<{catalog.Title}> Delete Confirmation";
 
@@ -126,7 +126,7 @@ namespace ZBlog.Controllers
         public async Task<IActionResult> Delete(int? id, CancellationToken requestAborted)
         {
             if (!id.HasValue || id <= 0)
-                return HttpBadRequest();
+                return BadRequest();
 
             var catalog = await _dbContext.Catalogs.FirstOrDefaultAsync(c => c.Id.Equals(id), requestAborted);
             _dbContext.Remove(catalog);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ZBlog.Common;
 
 namespace ZBlog.Models
@@ -22,7 +24,11 @@ namespace ZBlog.Models
                     {
                         await CreateAdminUser(dbContext, serverProvider);
                     }
-                    await InsertTestData(serverProvider);
+                    IHostingEnvironment hostingEnvironment = serverProvider.GetRequiredService<IHostingEnvironment>();
+                    if (hostingEnvironment.IsDevelopment())
+                    {
+                        await InsertTestData(serverProvider);
+                    }
                 }
             }
         }
@@ -78,9 +84,10 @@ namespace ZBlog.Models
             await dbContext.SaveChangesAsync();
         }
 
-        private static async Task CreateAdminUser(ZBlogDbContext dbContext, IServiceProvider serverProvider)
+        private static async Task CreateAdminUser(ZBlogDbContext dbContext, IServiceProvider serviceProvider)
         {
-            AppSettings appSettings = serverProvider.GetRequiredService<AppSettings>();
+            AppSettings appSettings = serviceProvider.GetRequiredService<IOptions<AppSettings>>().Value;
+            
             var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -89,7 +96,8 @@ namespace ZBlog.Models
                     Name = appSettings.UserInfo.Name,
                     NickName = appSettings.UserInfo.NickName,
                     Email = appSettings.UserInfo.Email,
-                    Password = Util.GetMd5(appSettings.UserInfo.Password)
+                    Password = Util.GetMd5(appSettings.UserInfo.Password),
+                    About = appSettings.AboutMeInShort
                 };
                 dbContext.Users.Add(user);
                 await dbContext.SaveChangesAsync();
