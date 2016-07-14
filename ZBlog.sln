@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EFE7247B-3FD9-4C31-A0B3-DAEEB82FDA07}"
 EndProject
@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		app.json = app.json
 		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
+		build.ps1 = build.ps1
 		build.sh = build.sh
 		global.json = global.json
 		LICENSE.txt = LICENSE.txt

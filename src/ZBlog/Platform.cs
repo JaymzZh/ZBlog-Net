@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.PlatformAbstractions;
 
 namespace ZBlog
 {
@@ -29,8 +28,7 @@ namespace ZBlog
             {
                 if (_isWindows == null)
                 {
-                    _isWindows = PlatformServices.Default.Runtime.OperatingSystem.Equals(
-                        "Windows", StringComparison.OrdinalIgnoreCase);
+                    _isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
                 }
 
                 return _isWindows.Value;
@@ -43,10 +41,7 @@ namespace ZBlog
             {
                 if (_isMono == null)
                 {
-                    _isMono = string.Equals(
-                        PlatformServices.Default.Runtime.RuntimeType,
-                        "Mono",
-                        StringComparison.OrdinalIgnoreCase);
+                    _isMono = Type.GetType("Mono.Runtime") != null;
                 }
 
                 return _isMono.Value;
@@ -59,7 +54,7 @@ namespace ZBlog
             {
                 if (_isNano == null)
                 {
-                    var osVersion = new Version(PlatformServices.Default.Runtime.OperatingSystemVersion ?? "");
+                    var osVersion = new Version(RtlGetVersion() ?? string.Empty);
 
                     try
                     {
@@ -89,5 +84,35 @@ namespace ZBlog
 
         // Sql client not available on mono, non-windows, or nano
         public bool UseInMemoryStore => !IsRunningOnWindows || IsRunningOnMono || IsRunningOnNanoServer;
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct RTL_OSVERSIONINFOEX
+        {
+            internal uint dwOSVersionInfoSize;
+            internal uint dwMajorVersion;
+            internal uint dwMinorVersion;
+            internal uint dwBuildNumber;
+            internal uint dwPlatformId;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            internal string szCSDVersion;
+        }
+
+        // This call avoids the shimming Windows does to report old versions
+        [DllImport("ntdll")]
+        private static extern int RtlGetVersion(out RTL_OSVERSIONINFOEX lpVersionInformation);
+
+        internal static string RtlGetVersion()
+        {
+            RTL_OSVERSIONINFOEX osvi = new RTL_OSVERSIONINFOEX();
+            osvi.dwOSVersionInfoSize = (uint)Marshal.SizeOf(osvi);
+            if (RtlGetVersion(out osvi) == 0)
+            {
+                return $"{osvi.dwMajorVersion}.{osvi.dwMinorVersion}.{osvi.dwBuildNumber}";
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

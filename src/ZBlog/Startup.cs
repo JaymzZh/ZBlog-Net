@@ -85,7 +85,6 @@ namespace ZBlog
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseRuntimeInfoPage();
             }
             else
             {

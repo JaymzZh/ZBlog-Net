@@ -228,6 +228,7 @@ namespace ZBlog.Controllers
             var postTags = _dbContext.PostTags.Where(p => p.PostId == model.Id);
             _logger.LogDebug($"Remove posttags count:{postTags.Count()}");
             _dbContext.PostTags.RemoveRange(postTags);
+            await _dbContext.SaveChangesAsync(requestAborted);
 
             var tagArray = tags.Split(new[] {',', '，', ' '}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var t in tagArray)
