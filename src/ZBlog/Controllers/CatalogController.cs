@@ -14,10 +14,10 @@ namespace ZBlog.Controllers
         private readonly ZBlogDbContext _dbContext;
         private readonly ILogger _logger;
         
-        public CatalogController(ZBlogDbContext dbContext, ILoggerFactory loggerFactory)
+        public CatalogController(ZBlogDbContext dbContext, ILogger<CatalogController> logger)
         {
             _dbContext = dbContext;
-            _logger = loggerFactory.CreateLogger<PostController>();
+            _logger = logger;
         }
 
         // GET: /Catalog

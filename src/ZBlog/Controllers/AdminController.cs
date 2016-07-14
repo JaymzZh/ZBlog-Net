@@ -23,12 +23,12 @@ namespace ZBlog.Controllers
             ZBlogDbContext dbContext,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILogger<AdminController> logger)
         {
             _dbContext = dbContext;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<AdminController>();
+            _logger = logger;
         }
 
         //
