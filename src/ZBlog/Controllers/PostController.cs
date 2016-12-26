@@ -60,7 +60,7 @@ namespace ZBlog.Controllers
                         .Include(p => p.PostTags)
                         .ThenInclude(p => p.Tag)
                         .Include(p => p.User)
-                        .SingleOrDefaultAsync(p => p.Url.Equals(url, StringComparison.OrdinalIgnoreCase));
+                        .SingleOrDefaultAsync(p => p.Url.Equals(url));
 
             if (post == null)
                 return NotFound();
@@ -239,7 +239,7 @@ namespace ZBlog.Controllers
                 };
                 var tag =
                     await _dbContext.Tags.FirstOrDefaultAsync(
-                        x => x.Name.Equals(t, StringComparison.OrdinalIgnoreCase), requestAborted);
+                        x => x.Name.Equals(t), requestAborted);
                 if (tag == null)
                 {
                     tag = new Tag

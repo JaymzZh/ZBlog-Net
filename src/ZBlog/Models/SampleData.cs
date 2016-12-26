@@ -88,7 +88,7 @@ namespace ZBlog.Models
         {
             AppSettings appSettings = serviceProvider.GetRequiredService<IOptions<AppSettings>>().Value;
             
-            var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+            var user = await dbContext.Users.Where(u => u.Name.Equals("zhangmm")).FirstOrDefaultAsync();
             if (user == null)
             {
                 user = new User

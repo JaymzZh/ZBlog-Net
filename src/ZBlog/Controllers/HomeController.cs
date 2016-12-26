@@ -43,7 +43,7 @@ namespace ZBlog.Controllers
             .Include(p => p.PostTags)
             .ThenInclude(p => p.Tag)
             .Include(p => p.User)
-            .Where(p => p.Catalog.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+            .Where(p => p.Catalog.Title.Equals(title))
             .OrderByDescending(p => p.CreateTime);
 
             var result = await GetPagedResult(page, posts);
@@ -63,7 +63,7 @@ namespace ZBlog.Controllers
             .Include(p => p.PostTags)
             .ThenInclude(p => p.Tag)
             .Include(p => p.User)
-            .Where(p => p.PostTags.Any(t => t.Tag.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            .Where(p => p.PostTags.Any(t => t.Tag.Name.Equals(name)))
             .OrderByDescending(p => p.CreateTime);
 
             var result = await GetPagedResult(page, posts);
@@ -83,7 +83,7 @@ namespace ZBlog.Controllers
             .Include(p => p.PostTags)
             .ThenInclude(p => p.Tag)
             .Include(p => p.User)
-            .Where(p => p.User.NickName.Equals(name, StringComparison.OrdinalIgnoreCase))
+            .Where(p => p.User.NickName.Equals(name))
             .OrderByDescending(p => p.CreateTime);
 
             var result = await GetPagedResult(page, posts);
@@ -97,7 +97,7 @@ namespace ZBlog.Controllers
         {
             List<Post> result;
             int? pagePrev = null, pageNext = null;
-            if (page.HasValue && page.Value >= 1)
+            if (page.HasValue && page.Value > 1)
             {
                 int p = page.Value;
                 result =
