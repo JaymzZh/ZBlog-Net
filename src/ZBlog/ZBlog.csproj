@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.1;net451</TargetFrameworks>
     <RuntimeIdentifiers>win7-x64;ubuntu</RuntimeIdentifiers>
-    <RuntimeIdentifier>ubuntu</RuntimeIdentifier>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>ZBlog</AssemblyName>
@@ -57,9 +56,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.1'">
-    <PackageReference Include="Microsoft.NETCore.App">
-      <Version>1.1.1</Version>
-    </PackageReference>
   </ItemGroup>
   
   <ItemGroup>
