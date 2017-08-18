@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -13,16 +13,13 @@ namespace ZBlog
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
-            var host = new WebHostBuilder()
+            BuildWebHost(config, args).Run();
+        }
+
+        public static IWebHost BuildWebHost(IConfigurationRoot config, string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
-                .UseKestrel()
-                .UseUrls("http://+:5000")
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
-
-            host.Run();
-        }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ZBlog.Models;
 
 namespace ZBlog.Controllers
@@ -10,10 +11,12 @@ namespace ZBlog.Controllers
     public class HomeController : Controller
     {
         private readonly ZBlogDbContext _dbContext;
+        private readonly AppSettings _appSettings;
 
-        public HomeController(ZBlogDbContext dbContext)
+        public HomeController(ZBlogDbContext dbContext, IOptions<AppSettings> appSettings)
         {
             _dbContext = dbContext;
+            _appSettings = appSettings.Value;
         }
 
         [Route("{page:int?}")]
@@ -129,10 +132,10 @@ namespace ZBlog.Controllers
             return result;
         }
 
-        public IActionResult About(AppSettings appSettings)
+        public IActionResult About()
         {
-            ViewData["About"] = appSettings != null
-                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(appSettings.UserInfo.Name))?.About ??
+            ViewData["About"] = _appSettings != null
+                   ? _dbContext.Users.FirstOrDefault(u => u.Name.Equals(_appSettings.UserInfo.Name))?.About ??
                      "Nothing here..."
                    : "Can't find the configuration.";
 

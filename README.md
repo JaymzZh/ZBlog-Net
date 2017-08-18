@@ -4,4 +4,4 @@ AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/4i2xiu14y
 
 Travis: [![Build Status](https://travis-ci.org/Jeffiy/ZBlog-Net.svg?branch=master)](https://travis-ci.org/Jeffiy/ZBlog-Net)
 
-A blog powered by ~~ASP.NET 5~~ ASP.NET Core 1.0
+A blog powered by ~~ASP.NET 5~~ ASP.NET Core 2.0

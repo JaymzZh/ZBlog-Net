@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:15457/",
+      "applicationUrl": "http://localhost:25983/",
       "sslPort": 0
     }
   },
@@ -16,12 +16,12 @@
       }
     },
     "ZBlog": {
-        "commandName": "Project",
-        "launchBrowser": true,
-        "launchUrl": "http://localhost:5000",
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:25984/"
     }
   }
 }

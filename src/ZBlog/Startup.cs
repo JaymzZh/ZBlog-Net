@@ -54,7 +54,7 @@ namespace ZBlog
 
             services.AddMvc();
             services.AddMemoryCache();
-            services.AddDistributedMemoryCache();
+//            services.AddDistributedMemoryCache();
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(20));
 
             services.AddSingleton(Configuration);
@@ -109,20 +109,7 @@ namespace ZBlog
             
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
             
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areaRoute",
-                    template: "{area:exists}/{controller=Home}/{action=Index}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "api",
-                    template: "{controller}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
 
             SampleData.InitializeZBlog(app.ApplicationServices).Wait();
         }
